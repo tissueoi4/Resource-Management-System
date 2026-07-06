@@ -1,1 +1,1 @@
-# Resource-Management-System
+# Resource-Management-System (Kanna Nakagome)
