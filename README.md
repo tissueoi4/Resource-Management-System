@@ -1,1 +1,1 @@
-# Resource-Management-System (２６T００１９ Kanna Nakagome)
+# Resource-Management-System (26T0019 Kanna Nakagome)
