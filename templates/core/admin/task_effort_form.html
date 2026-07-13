@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if form.instance.pk %}工数の変更{% else %}新規アサイン{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                
+                {% if form.instance.pk %}
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">プロジェクトアサイン工数の変更</h4>
+                </div>
+                {% else %}
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">プロジェクトへの新規アサイン</h4>
+                </div>
+                {% endif %}
+
+                <div class="card-body p-4">
+                    <div class="mb-4 bg-light p-3 rounded row g-2">
+                        <div class="col-sm-4"><strong>社員番号:</strong> {{ form.instance.user.employee_number|default:target_user.employee_number }}</div>
+                        <div class="col-sm-4"><strong>氏名:</strong> {{ form.instance.user.get_full_name|default:target_user.get_full_name }}</div>
+                        <div class="col-sm-4"><strong>対象月:</strong> {% if form.instance.target_month %}{{ form.instance.target_month|date:"Y年m月" }}{% else %}{{ year_month_str }}{% endif %}</div>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted d-block">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ field.errors|striptags }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between mt-5">
+                            {% if form.instance.pk %}
+                                <a href="{% url 'admin_resource_management' %}?month={{ form.instance.target_month|date:'Y-m' }}" class="btn btn-outline-secondary px-4">キャンセル</a>
+                            {% else %}
+                                <a href="{% url 'admin_resource_management' %}?month={{ year_month_str }}" class="btn btn-outline-secondary px-4">キャンセル</a>
+                            {% endif %}
+                            
+                            {% if form.instance.pk %}
+                                <button type="submit" class="btn btn-primary px-5 fw-bold">工数を変更する</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-success px-5 fw-bold">新規割り当てを確定</button>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
