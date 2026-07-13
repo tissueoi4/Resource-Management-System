@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}社員用ダッシュボード{% endblock title %}
+
 {% block content %}
 <div class="container mt-4">
     <h3>一般社員ダッシュボード</h3>
@@ -8,15 +10,15 @@
     <div class="row mt-4">
         <div class="col-md-6">
             <div class="card p-3">
-                <h5>1. 稼働可能時間の設定</h5>
-                <p>今月の最大稼働枠を登録します。</p>
-                <a href="{% url 'resource_add' %}" class="btn btn-outline-primary">稼働枠を設定する</a>
+                <h5>稼働可能時間の設定</h5>
+                <p>月の最大稼働枠を登録します。</p>
+                <a href="{% url 'resource_add' %}" class="btn btn-primary">稼働枠を設定する</a>
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="card p-3">
-                <h5>2. プロジェクト別工数の登録</h5>
+                <h5>プロジェクト別工数の登録</h5>
                 <p>各プロジェクトへの配分時間を登録します。</p>
                 <a href="{% url 'task_effort_create' %}" class="btn btn-success">プロジェクトの工数を登録する</a>
             </div>

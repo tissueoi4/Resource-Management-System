@@ -3,21 +3,20 @@
 {% block title %}管理者ダッシュボード{% endblock title %}
 
 {% block content %}
-    <br>
     <div class="container">
-        <h2>管理者ダッシュボード</h2>
+        <h3>管理者ダッシュボード</h3>
         <br>
         <p>ようこそ、管理者 （{{ user.get_full_name }}） さん！</p>
     </div>
     <div class="row mt-4">
             <div class="col-md-4">
-                <a href="{% url 'admin_employee_list' %}" class="btn btn-outline-primary w-100 mb-3">社員一覧・権限管理</a>
+                <a href="{% url 'admin_employee_list' %}" class="btn btn-primary w-100 mb-3">社員一覧・権限管理</a>
             </div>
             <div class="col-md-4">
-                <a href="{% url 'project_list' %}" class="btn btn-outline-success w-100 mb-3">プロジェクト一覧・登録</a>
+                <a href="{% url 'project_list' %}" class="btn btn-success w-100 mb-3">プロジェクト一覧・登録</a>
             </div>
             <div class="col-md-4">
-                <a href="{% url 'admin_resource_management' %}" class="btn btn-outline-info w-100 mb-3">全体リソース状況</a>
+                <a href="{% url 'admin_resource_management' %}" class="btn btn-info w-100 mb-3">全体リソース状況</a>
             </div>
             
             <div class="col-md-4">
