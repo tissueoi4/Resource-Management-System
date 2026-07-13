@@ -2,7 +2,6 @@ from django.urls import path
 from core.views import admin_views # 管理者用のビューだけを読み込む
 
 urlpatterns = [
-    # ここでは 'admin-dashboard/' ではなく 'dashboard/' だけでOKになります（理由は後述）
     path('dashboard/', admin_views.AdminDashboardView.as_view(), name='admin_dashboard'),
     path('projects/', admin_views.ProjectListView.as_view(), name='project_list'),
     path('projects/create/', admin_views.ProjectCreateView.as_view(), name='project_create'),

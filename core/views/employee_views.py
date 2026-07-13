@@ -7,7 +7,6 @@ from datetime import datetime
 from django.shortcuts import redirect
 from django.contrib import messages
 
-# 作成したモデルとフォームの読み込みを追加
 from core.models import TaskEffort, AvailableResource
 from core.forms import TaskEffortForm, AvailableResourceForm
 
@@ -34,11 +33,9 @@ class TaskEffortCreateView(LoginRequiredMixin, CreateView):
     model = TaskEffort
     form_class = TaskEffortForm
     template_name = 'core/employee/task_effort_form.html'
-    success_url = reverse_lazy('employee_dashboard') # 保存後はダッシュボードに戻る
+    success_url = reverse_lazy('employee_dashboard')
 
     def form_valid(self, form):
-        # 画面の入力内容を保存する直前に、「今ログインしている人」を紐づける
-        # ※ 'user' の部分は models.py の定義に合わせて 'employee' などに変えてください
         form.instance.user = self.request.user 
         return super().form_valid(form)
 
@@ -49,12 +46,9 @@ class AvailableResourceCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('employee_dashboard')
 
     def form_valid(self, form):
-        # フォームの値を手動で取得
         target_month = form.cleaned_data['target_month']
         available_hours = form.cleaned_data['available_hours']
 
-        # ★ここが魔法のコードです
-        # 既存データがあれば更新し、なければ新規作成します
         AvailableResource.objects.update_or_create(
             user=self.request.user,
             target_month=target_month,

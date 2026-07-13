@@ -1,4 +1,4 @@
-def user_roles(request):  # ← ここを user_roles に変更！
+def user_roles(request):
     is_admin = False
     if request.user.is_authenticated:
         # roleフィールドで判定するように統一！

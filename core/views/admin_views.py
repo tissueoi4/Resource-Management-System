@@ -42,7 +42,6 @@ class AdminEmployeeListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
         
         # もしキーワードが入力されていたら、社員番号で絞り込む
         if query:
-            # icontains = 「一部でも一致していればヒットする」という便利なフィルターです
             queryset = queryset.filter(employee_number__icontains=query)
             
         return queryset
@@ -73,7 +72,6 @@ class AdminEmployeeCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView
 
     def form_valid(self, form):
         user = form.save()
-        # 画面に成功メッセージを出す設定
         messages.success(self.request, f"社員番号 {user.employee_number} のアカウントを作成しました。")
         return super().form_valid(form)
 
@@ -105,8 +103,8 @@ class ProjectListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
 
 class ProjectCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Project
-    form_class = ProjectForm  # 元のコード通り、専用のフォームクラスを使用
-    template_name = 'core/admin/project_form.html' # 独立したフォーム画面を指定
+    form_class = ProjectForm
+    template_name = 'core/admin/project_form.html'
     success_url = reverse_lazy('project_list')
 
     def form_valid(self, form):
@@ -116,7 +114,6 @@ class ProjectCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
 class ProjectUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
-    # 新規登録で作ったテンプレートをそのまま「使い回し」できます！
     template_name = 'core/admin/project_form.html'
     success_url = reverse_lazy('project_list')
 
@@ -147,10 +144,10 @@ class AdminResourceManagementView(LoginRequiredMixin, AdminRequiredMixin, ListVi
             to_attr='month_efforts'
         )
 
-        # ▼ 修正ポイント1：並び順を社員番号順（order_by）に固定しました
+        # 社員番号順（order_by）に固定
         queryset = User.objects.prefetch_related(available_prefetch, effort_prefetch).exclude(is_superuser=True).order_by('employee_number')
         
-        # ▼ 修正ポイント2：社員番号での検索処理を追加しました
+        # 社員番号での検索処理を追加
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(employee_number__icontains=query)
@@ -165,7 +162,6 @@ class AdminResourceManagementView(LoginRequiredMixin, AdminRequiredMixin, ListVi
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_month'] = self.request.GET.get('month', timezone.now().strftime('%Y-%m'))
-        # ▼ 修正ポイント3：検索キーワード（q）を画面に残すための処理を追加しました
         context['query'] = self.request.GET.get('q', '')
         return context
 

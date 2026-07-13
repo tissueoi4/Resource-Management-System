@@ -4,7 +4,6 @@ from datetime import datetime
 
 
 class AvailableResourceForm(forms.ModelForm):
-    # input_formatsを指定するだけで、Djangoが自動で 2026-07 を 2026-07-01 にしてくれます！
     target_month = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'month', 'class': 'form-control'}),
         input_formats=['%Y-%m'], 
@@ -19,7 +18,6 @@ class AvailableResourceForm(forms.ModelForm):
         }
 
 class TaskEffortForm(forms.ModelForm):
-    # 月の入力（2026-07）を自動的に日付（2026-07-01）に変換する魔法
     target_month = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'month', 'class': 'form-control'}),
         input_formats=['%Y-%m'], 

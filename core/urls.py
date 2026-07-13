@@ -17,7 +17,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # include('core.urls') とだけ書くと、Djangoは core/urls/__init__.py を探しに行きます
     path('employee/', include('core.urls.employee_urls')),
     path('', include('core.urls')),
 ]

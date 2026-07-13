@@ -6,7 +6,6 @@ from core.forms.auth_forms import ProfileEditForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
-# ※ フォルダ構造に合わせてインポート（ファイル直置きを想定）
 from core.forms import CustomSignUpForm 
 
 class SignUpView(CreateView):
