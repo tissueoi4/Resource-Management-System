@@ -26,21 +26,48 @@
 
     <body>
         {% block header %}
-        <div class="align-items-center bg-white border-bottom p-3 d-flex justify-content-between">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+            <div class="container">
+                <!-- 左側のタイトル -->
+                <a class="navbar-brand fw-bold" href="{% url 'dashboard_redirect' %}">リソース管理システム</a>
             
-            <h5 class="m-0"><a href="{% url 'dashboard_redirect' %}">リソース管理システム</a></h5>
-            <div class="d-flex">
-            {% if user.is_authenticated %}
-                {% if is_admin %}
-                    <a href="{% url 'admin_dashboard' %}" class="btn btn-sm btn-outline-primary me-2">管理者画面</a>
-                {% endif %}
-                <form action="{% url 'logout' %}" method="post" class="m-0">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-outline-secondary">ログアウト</button>
-                </form>
-            {% endif %}
-        </div>
+                <!-- 右側のメニュー群 -->
+                <div class="collapse navbar-collapse justify-content-end">
+                    {% if user.is_authenticated %}
+                    <ul class="navbar-nav align-items-center mb-0">
+                        
+                        <!-- ユーザー名 -->
+                        <li class="nav-item me-3 text-light" style="font-size: 0.9rem;">
+                            {{ user.employee_number }} ({{ user.get_full_name }}) さん
+                        </li>
+
+                        {% if user.is_superuser or user.role == 'ADMIN' %}
+                        <li class="nav-item me-3">
+                            <a class="nav-link text-white py-1 px-2 border border-secondary rounded" href="{% url 'admin_dashboard' %}">管理者画面</a>
+                        </li>
+                        {% endif %}
+                    
+                        <!-- 設定ボタン -->
+                        <li class="nav-item me-3">
+                            <a class="btn btn-sm btn-outline-info" href="{% url 'profile_edit' %}">👤 アカウント</a>
+                        </li>
+
+                        <!-- ログアウトボタン -->
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}" class="m-0 d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">ログアウト</button>
+                            </form>
+                        </li>
+                        
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
         {% endblock %}
+
+         
 
         <div class="container">
             {% block content %}{% endblock %}

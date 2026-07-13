@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}アカウント設定{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-info text-dark fw-bold d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">👤 アカウント情報</h5>
+                    <button type="button" id="edit-btn" class="btn btn-sm btn-light fw-bold shadow-sm">
+                        ✎ 編集する
+                    </button>
+                </div>
+                
+                <div class="card-body p-4">
+                    <div id="view-mode">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <tr>
+                                    <th class="text-muted" style="width: 140px;">社員番号</th>
+                                    <td class="fw-bold fs-5">{{ user.employee_number }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted">氏名 (本名)</th>
+                                    <td class="fw-bold fs-5">
+                                        {% if user.last_name or user.first_name %}
+                                            {{ user.last_name }} {{ user.first_name }}
+                                        {% else %}
+                                            <span class="text-black-50">未設定</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted">メールアドレス</th>
+                                    <td class="fw-bold">
+                                        {% if user.email %}
+                                            {{ user.email }}
+                                        {% else %}
+                                            <span class="text-black-50">未設定</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="edit-mode" class="d-none">
+                        <p class="text-muted mb-4">システム上で表示されるあなたの情報を設定してください。</p>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="text-danger mt-1">{{ field.errors|striptags }}</div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="button" id="cancel-btn" class="btn btn-outline-secondary px-4">キャンセル</button>
+                                <button type="submit" class="btn btn-info px-4 fw-bold">保存する</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const viewMode = document.getElementById('view-mode');
+        const editMode = document.getElementById('edit-mode');
+        const editBtn = document.getElementById('edit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+
+        // 「編集する」ボタンを押した時の動き
+        editBtn.addEventListener('click', function() {
+            viewMode.classList.add('d-none');    // 閲覧モードを隠す
+            editBtn.classList.add('d-none');     // 右上の編集ボタンを隠す
+            editMode.classList.remove('d-none'); // 編集モードを表示する
+        });
+
+        // 「キャンセル」ボタンを押した時の動き
+        cancelBtn.addEventListener('click', function() {
+            editMode.classList.add('d-none');    // 編集モードを隠す
+            viewMode.classList.remove('d-none'); // 閲覧モードを表示する
+            editBtn.classList.remove('d-none');  // 右上の編集ボタンを復活させる
+        });
+
+        {% if form.errors %}
+            editBtn.click();
+        {% endif %}
+    });
+</script>
+{% endblock %}
