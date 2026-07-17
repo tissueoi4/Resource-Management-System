@@ -1,2 +1,7 @@
-00001 pass: First_admin
-00002 pass: First_employee
+(superuser)
+社員番号: 00000 pass: admin
+
+社員番号: 00001 pass: First_admin
+社員番号: 00002 pass: First_employee
+社員番号: 00003 pass: Second_admin
+社員番号: 00004 pass: Second_employee

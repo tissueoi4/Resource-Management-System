@@ -1,75 +1,98 @@
 {% extends "base.html" %}
 
-{% block title %}アカウント設定{% endblock %}
+{% block title %}アカウント情報{% endblock title %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
+    
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-info text-dark fw-bold d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">👤 アカウント情報</h5>
-                    <button type="button" id="edit-btn" class="btn btn-sm btn-light fw-bold shadow-sm">
-                        ✎ 編集する
-                    </button>
-                </div>
-                
-                <div class="card-body p-4">
-                    <div id="view-mode">
-                        <table class="table table-borderless mb-0">
-                            <tbody>
-                                <tr>
-                                    <th class="text-muted" style="width: 140px;">社員番号</th>
-                                    <td class="fw-bold fs-5">{{ user.employee_number }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">氏名 (本名)</th>
-                                    <td class="fw-bold fs-5">
-                                        {% if user.last_name or user.first_name %}
-                                            {{ user.last_name }} {{ user.first_name }}
-                                        {% else %}
-                                            <span class="text-black-50">未設定</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted">メールアドレス</th>
-                                    <td class="fw-bold">
-                                        {% if user.email %}
-                                            {{ user.email }}
-                                        {% else %}
-                                            <span class="text-black-50">未設定</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <div class="col-md-8 col-lg-6">
+            
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-md-5">
+                    
+
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                        <h4 class="fw-bold mb-0 d-flex align-items-center" style="color: #111827; letter-spacing: -0.02em;">
+                            <span class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 40px; height: 40px; font-size: 1.2rem;">
+                                👤
+                            </span>
+                            アカウント情報
+                        </h4>
+                        
+                        <button type="button" id="edit-btn" class="btn btn-sm btn-light border shadow-sm rounded-pill px-3 fw-semibold text-secondary d-flex align-items-center">
+                            <span class="me-1">✎</span> 編集する
+                        </button>
                     </div>
 
-                    <div id="edit-mode" class="d-none">
-                        <p class="text-muted mb-4">システム上で表示されるあなたの情報を設定してください。</p>
-                        
-                        <form method="post">
-                            {% csrf_token %}
-                            {% for field in form %}
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% if field.errors %}
-                                        <div class="text-danger mt-1">{{ field.errors|striptags }}</div>
+
+                    <div id="view-mode">
+                        <div class="vstack">
+
+                            <div class="row py-3 border-bottom">
+                                <div class="col-sm-4 text-muted small fw-medium d-flex align-items-center mb-1 mb-sm-0">
+                                    社員番号
+                                </div>
+                                <div class="col-sm-8 fw-bold" style="color: #111827; font-size: 1.1rem;">
+                                    {{ user.employee_number|default:"00000" }}
+                                </div>
+                            </div>
+
+                            <div class="row py-3 border-bottom">
+                                <div class="col-sm-4 text-muted small fw-medium d-flex align-items-center mb-1 mb-sm-0">
+                                    氏名 (本名)
+                                </div>
+                                <div class="col-sm-8 fw-medium text-secondary">
+                                    {% if user.get_full_name %}
+                                        {{ user.get_full_name }}
+                                    {% else %}
+                                        <span class="text-black-50">未設定</span>
                                     {% endif %}
                                 </div>
-                            {% endfor %}
-                            
-                            <div class="d-flex justify-content-between mt-4">
-                                <button type="button" id="cancel-btn" class="btn btn-outline-secondary px-4">キャンセル</button>
-                                <button type="submit" class="btn btn-info px-4 fw-bold">保存する</button>
                             </div>
-                        </form>
+
+                            <div class="row py-3">
+                                <div class="col-sm-4 text-muted small fw-medium d-flex align-items-center mb-1 mb-sm-0">
+                                    メールアドレス
+                                </div>
+                                <div class="col-sm-8 fw-medium text-secondary">
+                                    {% if user.email %}
+                                        {{ user.email }}
+                                    {% else %}
+                                        <span class="text-black-50">未設定</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
+
+                    <form id="edit-mode" class="d-none" method="post">
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger small p-2 mb-3">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-4">
+                            {{ form.as_p }}
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                            <button type="button" id="cancel-btn" class="btn btn-light border rounded-pill px-4 fw-semibold text-secondary">
+                                キャンセル
+                            </button>
+                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-semibold shadow-sm">
+                                保存する
+                            </button>
+                        </div>
+                    </form>
 
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -95,9 +118,10 @@
             editBtn.classList.remove('d-none');  // 右上の編集ボタンを復活させる
         });
 
+        // エラーがある場合は自動で編集モードを開いておく
         {% if form.errors %}
             editBtn.click();
         {% endif %}
     });
 </script>
-{% endblock %}
+{% endblock content %}

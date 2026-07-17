@@ -26,37 +26,39 @@
 
     <body>
         {% block header %}
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4 py-3">
             <div class="container">
-                <!-- 左側のタイトル -->
-                <a class="navbar-brand fw-bold" href="{% url 'dashboard_redirect' %}">リソース管理システム</a>
+                
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'dashboard_redirect' %}" style="color: #111827; letter-spacing: -0.02em;"> 
+                    リソース管理システム
+                </a>
             
-                <!-- 右側のメニュー群 -->
                 <div class="collapse navbar-collapse justify-content-end">
                     {% if user.is_authenticated %}
-                    <ul class="navbar-nav align-items-center mb-0">
+                    <ul class="navbar-nav align-items-center mb-0 gap-3">
                         
-                        <!-- ユーザー名 -->
-                        <li class="nav-item me-3 text-light" style="font-size: 0.9rem;">
-                            {{ user.employee_number }} ({{ user.get_full_name }}) さん
+                        <li class="nav-item text-secondary fw-medium" style="font-size: 0.9rem;">
+                            {{ user.get_full_name }} <span class="text-muted small">({{ user.employee_number }})</span>
                         </li>
 
                         {% if user.is_superuser or user.role == 'ADMIN' %}
-                        <li class="nav-item me-3">
-                            <a class="nav-link text-white py-1 px-2 border border-secondary rounded" href="{% url 'admin_dashboard' %}">管理者画面</a>
+                        <li class="nav-item">
+                            <a class="btn btn-sm btn-dark fw-semibold px-3 rounded-pill shadow-sm" href="{% url 'admin_dashboard' %}">
+                                管理者画面
+                            </a>
                         </li>
                         {% endif %}
                     
-                        <!-- 設定ボタン -->
-                        <li class="nav-item me-3">
-                            <a class="btn btn-sm btn-outline-info" href="{% url 'profile_edit' %}">👤 アカウント</a>
+                        <li class="nav-item">
+                            <a class="btn btn-sm btn-light border text-secondary fw-semibold px-3 rounded-pill" href="{% url 'profile_edit' %}">
+                                👤 アカウント
+                            </a>
                         </li>
 
-                        <!-- ログアウトボタン -->
                         <li class="nav-item">
                             <form method="post" action="{% url 'logout' %}" class="m-0 d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger">ログアウト</button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger fw-semibold px-3 rounded-pill">ログアウト</button>
                             </form>
                         </li>
                         

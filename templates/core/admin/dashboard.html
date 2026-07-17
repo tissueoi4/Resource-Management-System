@@ -3,26 +3,60 @@
 {% block title %}管理者ダッシュボード{% endblock title %}
 
 {% block content %}
-    <div class="container">
-        <h3>管理者ダッシュボード</h3>
-        <br>
-        <p>ようこそ、管理者 （{{ user.get_full_name }}） さん！</p>
+
+<div class="container py-5">
+    
+
+    <div class="mb-5 pb-3 border-bottom">
+        <h3 class="mb-2">管理者ダッシュボード</h3>
+        <p class="text-secondary mb-0 small">
+            ようこそ、{{ user.get_full_name }}さん。
+        </p>
     </div>
-    <div class="row mt-4">
-            <div class="col-md-4">
-                <a href="{% url 'admin_employee_list' %}" class="btn btn-primary w-100 mb-3">社員一覧・権限管理</a>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-2">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">👥 社員一覧・権限管理</h5>
+                    <p class="card-text text-muted small flex-grow-1">社員アカウントの作成や、権限の設定を行います。</p>
+                    <a href="{% url 'admin_employee_list' %}" class="btn btn-primary w-100 mt-auto">管理画面へ</a>
+                </div>
             </div>
-            <div class="col-md-4">
-                <a href="{% url 'project_list' %}" class="btn btn-success w-100 mb-3">プロジェクト一覧・登録</a>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-2">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">📁 プロジェクト一覧・登録</h5>
+                    <p class="card-text text-muted small flex-grow-1">プロジェクトの新規登録や詳細情報を確認します。</p>
+                    <a href="{% url 'project_list' %}" class="btn btn-success w-100 mt-auto">一覧・登録へ</a>
+                </div>
             </div>
-            <div class="col-md-4">
-                <a href="{% url 'admin_resource_management' %}" class="btn btn-info w-100 mb-3">全体リソース状況</a>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-2">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">📊 全体リソース状況</h5>
+                    <p class="card-text text-muted small flex-grow-1">各社員の稼働状況や、プロジェクトへの配分工数を確認します。</p>
+                    <a href="{% url 'admin_resource_management' %}" class="btn btn-info text-white fw-bold w-100 mt-auto">リソース状況へ</a>
+                </div>
             </div>
-            
-            <div class="col-md-4">
-                <a href="{% url 'employee_dashboard' %}" class="btn btn-secondary w-100 mb-3">
-                    社員用ダッシュボードへ
-                </a>
+        </div>
+        
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-2" style="background-color: #f8f9fc;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">💻 一般社員ダッシュボード</h5>
+                    <p class="card-text text-muted small flex-grow-1">自分自身の稼働枠設定や、工数登録を行う画面に移動します。</p>
+                    <a href="{% url 'employee_dashboard' %}" class="btn btn-secondary w-100 mt-auto">画面を切り替え</a>
+                </div>
             </div>
+        </div>
+
     </div>
+
+</div>
 {% endblock content %}
