@@ -3,27 +3,60 @@
 {% block title %}権限設定変更{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container py-5">
+
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">社員番号 {{ object.employee_number }} の権限変更</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                        <h4 class="fw-bold mb-0" style="color: #111827; letter-spacing: -0.02em;">
+                            権限設定変更
+                        </h4>
+                    </div>
+
+                    <p class="text-secondary small mb-4 pb-2">
+                        社員番号 <span class="fw-bold text-dark px-1">{{ object.employee_number }}</span> のアカウントロールを変更します。
+                    </p>
+
+                    <form method="post" class="modern-form">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">割り当てるロール</label>
-                            {{ form.role }}
+                        
+                        <div class="mb-4">
+                            <div class="mb-3">
+
+                                <label for="{{ form.role.id_for_label }}" class="form-label fw-semibold text-secondary small mb-1">
+                                    割り当てるロール
+                                </label>
+
+                                {{ form.role }}
+
+                                {% if form.role.errors %}
+                                    <div class="text-danger small mt-1 fw-medium">
+                                        {{ form.role.errors|striptags }}
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between mt-4">
-                            <a href="{% url 'admin_employee_list' %}" class="btn btn-outline-secondary">戻る</a>
-                            <button type="submit" class="btn btn-primary">権限を確定する</button>
+
+                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+
+                            <a href="{% url 'admin_employee_list' %}" class="btn btn-light border rounded-pill px-4 fw-semibold text-secondary">
+                                戻る
+                            </a>
+
+                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-semibold shadow-sm">
+                                権限を確定する
+                            </button>
                         </div>
                     </form>
+                    
                 </div>
             </div>
+
         </div>
     </div>
 </div>

@@ -3,38 +3,69 @@
 {% block title %}稼働時間の編集{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container py-5">
+
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-warning text-dark fw-bold">
-                    <h4 class="mb-0">毎月の最大稼働枠の編集</h4>
-                </div>
-                <div class="card-body p-4">
-                    <div class="mb-4 bg-light p-3 rounded">
-                        <p class="mb-1"><strong>社員番号:</strong> {{ target_user.employee_number }}</p>
-                        <p class="mb-1"><strong>氏名:</strong> {{ target_user.get_full_name }}</p>
-                        <p class="mb-0"><strong>対象月:</strong> {{ year_month }}</p>
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                        <h4 class="fw-bold mb-0" style="color: #111827; letter-spacing: -0.02em;">
+                            最大稼働枠の編集
+                        </h4>
                     </div>
 
-                    <form method="post">
+                    <div class="bg-light border rounded-3 p-3 mb-4">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                            <span class="text-secondary small fw-medium">対象社員</span>
+                            <span class="fw-bold text-dark">
+                                {{ target_user.get_full_name }} 
+                                <span class="text-muted fw-normal small">({{ target_user.employee_number }})</span>
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-secondary small fw-medium">対象月</span>
+                            <span class="fw-bold text-primary">{{ year_month }}</span>
+                        </div>
+                    </div>
+
+                    <form method="post" class="modern-form">
                         {% csrf_token %}
                         
                         <div class="mb-4">
-                            <label for="availableHoursInput" class="form-label fw-bold">稼働可能時間 (時間)</label>
-                            <input type="number" name="available_hours" id="availableHoursInput" 
-                                   class="form-control form-control-lg" 
-                                   value="{{ resource.available_hours }}" min="0" required>
-                            <small class="form-text text-muted">この社員が対象月に稼働できる上限時間を入力してください。</small>
+                            <div class="mb-3">
+
+                                <label for="availableHoursInput" class="form-label fw-semibold text-secondary small mb-1">
+                                    稼働可能時間 (時間)
+                                </label>
+
+                                <input type="number" name="available_hours" id="availableHoursInput" 
+                                       value="{{ resource.available_hours }}" min="0" required>
+
+                                <div class="helptext">
+                                    この社員が対象月に稼働できる上限時間を入力してください。
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="d-flex justify-content-between mt-5">
-                            <a href="{% url 'admin_resource_management' %}?month={{ year_month }}" class="btn btn-outline-secondary px-4">キャンセル</a>
-                            <button type="submit" class="btn btn-warning px-5 fw-bold">更新する</button>
+                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+
+                            <a href="{% url 'admin_resource_management' %}?month={{ year_month }}" class="btn btn-light border rounded-pill px-4 fw-semibold text-secondary">
+                                キャンセル
+                            </a>
+
+                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-semibold shadow-sm">
+                                更新する
+                            </button>
                         </div>
                     </form>
+                    
                 </div>
             </div>
+
         </div>
     </div>
 </div>

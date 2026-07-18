@@ -5,62 +5,88 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-0">
-                
-                {% if form.instance.pk %}
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">プロジェクトアサイン工数の変更</h4>
-                </div>
-                {% else %}
-                <div class="card-header bg-success text-white">
-                    <h4 class="mb-0">プロジェクトへの新規アサイン</h4>
-                </div>
-                {% endif %}
+<div class="container py-5">
 
-                <div class="card-body p-4">
-                    <div class="mb-4 bg-light p-3 rounded row g-2">
-                        <div class="col-sm-4"><strong>社員番号:</strong> {{ form.instance.user.employee_number|default:target_user.employee_number }}</div>
-                        <div class="col-sm-4"><strong>氏名:</strong> {{ form.instance.user.get_full_name|default:target_user.get_full_name }}</div>
-                        <div class="col-sm-4"><strong>対象月:</strong> {% if form.instance.target_month %}{{ form.instance.target_month|date:"Y年m月" }}{% else %}{{ year_month_str }}{% endif %}</div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                        <h4 class="fw-bold mb-0" style="color: #111827; letter-spacing: -0.02em;">
+                            {% if form.instance.pk %}プロジェクトアサイン工数の変更{% else %}プロジェクトへの新規アサイン{% endif %}
+                        </h4>
                     </div>
 
-                    <form method="post">
+                    <div class="bg-light border rounded-3 p-3 mb-4">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                            <span class="text-secondary small fw-medium">対象社員</span>
+                            <span class="fw-bold text-dark">
+                                {{ form.instance.user.get_full_name|default:target_user.get_full_name }} 
+                                <span class="text-muted fw-normal small">({{ form.instance.user.employee_number|default:target_user.employee_number }})</span>
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-secondary small fw-medium">対象月</span>
+                            <span class="fw-bold text-primary">
+                                {% if form.instance.target_month %}
+                                    {{ form.instance.target_month|date:"Y年m月" }}
+                                {% else %}
+                                    {{ year_month_str }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <form method="post" class="modern-form">
                         {% csrf_token %}
                         
-                        {% for field in form %}
-                            <div class="mb-4">
-                                <label class="form-label fw-bold">{{ field.label }}</label>
-                                {{ field }}
-                                {% if field.help_text %}
-                                    <small class="form-text text-muted d-block">{{ field.help_text }}</small>
-                                {% endif %}
-                                {% if field.errors %}
-                                    <div class="text-danger mt-1">
-                                        {{ field.errors|striptags }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
+                        <div class="mb-4">
+                            {% for field in form %}
+                                <div class="mb-3">
 
-                        <div class="d-flex justify-content-between mt-5">
+                                    <label for="{{ field.id_for_label }}" class="form-label fw-semibold text-secondary small mb-1">
+                                        {{ field.label }}
+                                    </label>
+                                    
+                                    {{ field }}
+
+                                    {% if field.help_text %}
+                                        <div class="helptext">{{ field.help_text|safe }}</div>
+                                    {% endif %}
+
+                                    {% if field.errors %}
+                                        <div class="text-danger small mt-1 fw-medium">
+                                            {{ field.errors|striptags }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+
                             {% if form.instance.pk %}
-                                <a href="{% url 'admin_resource_management' %}?month={{ form.instance.target_month|date:'Y-m' }}" class="btn btn-outline-secondary px-4">キャンセル</a>
+                                <a href="{% url 'admin_resource_management' %}?month={{ form.instance.target_month|date:'Y-m' }}" class="btn btn-light border rounded-pill px-4 fw-semibold text-secondary">
+                                    キャンセル
+                                </a>
                             {% else %}
-                                <a href="{% url 'admin_resource_management' %}?month={{ year_month_str }}" class="btn btn-outline-secondary px-4">キャンセル</a>
+                                <a href="{% url 'admin_resource_management' %}?month={{ year_month_str }}" class="btn btn-light border rounded-pill px-4 fw-semibold text-secondary">
+                                    キャンセル
+                                </a>
                             {% endif %}
-                            
-                            {% if form.instance.pk %}
-                                <button type="submit" class="btn btn-primary px-5 fw-bold">工数を変更する</button>
-                            {% else %}
-                                <button type="submit" class="btn btn-success px-5 fw-bold">新規割り当てを確定</button>
-                            {% endif %}
+
+                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-semibold shadow-sm">
+                                {% if form.instance.pk %}工数を変更する{% else %}新規割り当てを確定{% endif %}
+                            </button>
                         </div>
                     </form>
+                    
                 </div>
             </div>
+
         </div>
     </div>
 </div>

@@ -3,146 +3,174 @@
 {% block title %}リソース管理表{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="mb-4">
-        <h2>リソース管理表</h2>
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2">
+        <h4 class="fw-bold mb-0 d-flex align-items-center" style="color: #111827; letter-spacing: -0.02em;">
+            <span class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 40px; height: 40px; font-size: 1.2rem;">
+                📊
+            </span>
+            リソース管理表
+        </h4>
     </div>
 
-    <div class="card shadow-sm mb-4 border-0 bg-light">
-        <div class="card-body">
-            <form method="get" class="row align-items-center g-3">
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <form method="get" class="row gx-4 align-items-center modern-form">
+
                 <div class="col-auto">
-                    <label class="form-label fw-bold mb-0">表示対象月:</label>
+                    <label class="col-form-label fw-semibold text-secondary small">表示対象月</label>
                 </div>
                 <div class="col-auto">
                     <input type="month" name="month" class="form-control" value="{{ current_month }}">
                 </div>
-                
-                <div class="col-auto ms-md-3">
-                    <label class="form-label fw-bold mb-0">社員検索:</label>
+
+                <div class="col-auto ms-md-4">
+                    <label class="col-form-label fw-semibold text-secondary small">社員検索</label>
                 </div>
                 <div class="col-auto">
                     <input type="search" name="q" class="form-control" placeholder="社員番号を入力" value="{{ query }}">
                 </div>
-                
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-dark">表示・検索</button>
-                </div>
 
-                {% if query %}
-                <div class="col-auto">
-                    <a href="?month={{ current_month }}" class="btn btn-link text-decoration-none">クリア</a>
+                <div class="col-auto d-flex align-items-center">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm text-nowrap">
+                        表示・検索
+                    </button>
+                    {% if query %}
+                        <a href="?month={{ current_month }}" class="btn btn-link text-decoration-none text-secondary text-nowrap ms-2 fw-semibold">
+                            クリア
+                        </a>
+                    {% endif %}
                 </div>
-                {% endif %}
             </form>
         </div>
     </div>
 
-    <div class="card shadow-sm border-0">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark">
+            <table class="table table-hover mb-0 align-middle">
+                <thead style="background-color: #f9fafb;">
                     <tr>
-                        <th>社員番号</th>
-                        <th>氏名</th>
-                        <th>稼働可能時間</th>
-                        <th>割り当て済み</th>
-                        <th>残工数</th>
-                        <th>ステータス</th>
-                        <th>操作・内訳</th>
+                        <th class="py-3 px-4 text-secondary small fw-semibold border-bottom-0">社員番号</th>
+                        <th class="py-3 px-4 text-secondary small fw-semibold border-bottom-0">氏名</th>
+                        <th class="py-3 px-4 text-secondary small fw-semibold border-bottom-0 text-end">稼働可能時間</th>
+                        <th class="py-3 px-4 text-secondary small fw-semibold border-bottom-0 text-end">割り当て済み</th>
+                        <th class="py-3 px-4 text-secondary small fw-semibold border-bottom-0 text-end">残工数</th>
+                        <th class="py-3 px-4 text-secondary small fw-semibold border-bottom-0 text-center">ステータス</th>
+                        <th class="py-3 px-4 text-secondary small fw-semibold border-bottom-0 text-end">操作・内訳</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for emp in employees %}
                     <tr>
-                        <td><span class="fw-bold">{{ emp.employee_number }}</span></td>
-                        <td>{{ emp.get_full_name }}</td>
-                        <td>{{ emp.available_hours }} 時間</td>
-                        <td>{{ emp.allocated_hours }} 時間</td>
-                        <td>
+                        <td class="py-3 px-4 fw-bold" style="color: #111827;">{{ emp.employee_number }}</td>
+                        <td class="py-3 px-4 fw-medium text-secondary">{{ emp.get_full_name }}</td>
+                        
+                        <td class="py-3 px-4 text-end">{{ emp.available_hours }} <span class="text-secondary small fw-normal">時間</span></td>
+                        <td class="py-3 px-4 text-end">{{ emp.allocated_hours }} <span class="text-secondary small fw-normal">時間</span></td>
+                        
+                        <td class="py-3 px-4 text-end">
                             {% if emp.remaining_hours < 0 %}
-                                <span class="text-danger fw-bold">{{ emp.remaining_hours }} 時間</span>
+                                <span class="fw-bold" style="color: #b91c1c;">{{ emp.remaining_hours }}</span> <span class="text-secondary small fw-normal">時間</span>
                             {% else %}
-                                <span class="text-success fw-bold">{{ emp.remaining_hours }} 時間</span>
+                                <span class="fw-bold text-dark">{{ emp.remaining_hours }}</span> <span class="text-secondary small fw-normal">時間</span>
                             {% endif %}
                         </td>
-                        <td>
+
+                        <td class="py-3 px-4 text-center">
                             {% if emp.remaining_hours < 0 %}
-                                <span class="badge bg-danger">オーバーロード</span>
+                                <span class="badge rounded-pill fw-semibold" style="background-color: #fee2e2; color: #b91c1c;">オーバーロード</span>
                             {% elif emp.allocated_hours == 0 %}
-                                <span class="badge bg-warning text-dark">未稼働</span>
+                                <span class="badge rounded-pill fw-semibold" style="background-color: #fef3c7; color: #b45309;">未稼働</span>
                             {% else %}
-                                <span class="badge bg-success">適正</span>
+                                <span class="badge rounded-pill fw-semibold" style="background-color: #dcfce7; color: #15803d;">適正</span>
                             {% endif %}
                         </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <button class="btn btn-sm btn-outline-primary text-nowrap" type="button" data-bs-toggle="collapse" data-bs-target="#details-{{ emp.id }}">
-                                    詳細 ({{ emp.month_efforts|length }}件)
+                        
+                        <td class="py-3 px-4 text-end">
+                            <div class="d-flex justify-content-end align-items-center gap-2">
+                                <button class="btn btn-sm btn-light border rounded-pill px-3 fw-semibold text-secondary text-nowrap" type="button" data-bs-toggle="collapse" data-bs-target="#details-{{ emp.id }}">
+                                    詳細 ({{ emp.month_efforts|length }})
                                 </button>
-                                <a href="{% url 'admin_resource_edit' emp.id current_month %}" class="btn btn-sm btn-warning text-nowrap">
-                                    稼働枠を編集
+                                <a href="{% url 'admin_resource_edit' emp.id current_month %}" class="btn btn-sm btn-dark rounded-pill px-3 fw-semibold text-nowrap">
+                                    枠編集
                                 </a>
                             </div>
                         </td>
                     </tr>
 
-                    <tr class="collapse bg-light" id="details-{{ emp.id }}">
-                        <td colspan="7" class="p-3">
-                            <div class="card border-0 shadow-inner">
-                                <div class="card-body py-2">
-                                    
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h6 class="fw-bold text-secondary mb-0">🛠 {{ emp.get_full_name }} さんのプロジェクト別工数内訳</h6>
-                                        <a href="{% url 'admin_effort_create' emp.id current_month %}" class="btn btn-sm btn-outline-success">
-                                            + 工数を新規割り当て
-                                        </a>
-                                    </div>
+                    <tr class="collapse" id="details-{{ emp.id }}">
+                        <td colspan="7" class="p-0 border-bottom-0">
+                            <div class="bg-light p-4" style="box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="fw-bold text-secondary mb-0 d-flex align-items-center">
+                                        <span class="me-2">🛠</span> {{ emp.get_full_name }} さんのプロジェクト内訳
+                                    </h6>
+                                    <a href="{% url 'admin_effort_create' emp.id current_month %}" class="btn btn-sm btn-outline-dark bg-white rounded-pill px-3 fw-semibold shadow-sm">
+                                        + 新規割り当て
+                                    </a>
+                                </div>
 
-                                    {% if emp.month_efforts %}
-                                        <table class="table table-sm table-bordered bg-white mb-0">
-                                            <thead class="table-secondary">
+                                {% if emp.month_efforts %}
+                                    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+                                        <table class="table table-sm mb-0 align-middle">
+                                            <thead style="background-color: #ffffff; border-bottom: 2px solid #f3f4f6;">
                                                 <tr>
-                                                    <th>対象プロジェクト</th>
-                                                    <th>アサイン工数</th>
-                                                    <th>管理者操作</th>
+                                                    <th class="py-2 px-3 text-secondary small fw-semibold border-0">対象プロジェクト</th>
+                                                    <th class="py-2 px-3 text-secondary small fw-semibold border-0 text-end">アサイン工数</th>
+                                                    <th class="py-2 px-3 text-secondary small fw-semibold border-0 text-end">管理者操作</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {% for effort in emp.month_efforts %}
-                                                <tr>
-                                                    <td class="fw-bold">{{ effort.project.name }}</td>
-                                                    <td>{{ effort.allocated_hours }} 時間</td>
-                                                    <td>
-                                                        <a href="{% url 'admin_effort_edit' effort.pk %}" class="btn btn-xs btn-primary btn-sm me-2">工数調整</a>
-                                                        <form action="{% url 'admin_effort_delete' effort.pk %}" method="post" class="d-inline" onsubmit="return confirm('本当にこの工数割り当てを削除しますか？');">
-                                                            {% csrf_token %}
-                                                            <button type="submit" class="btn btn-danger btn-sm">割り当て解除</button>
-                                                        </form>
+                                                <tr style="background-color: #ffffff;">
+                                                    <td class="py-2 px-3 fw-bold" style="color: #4b5563;">{{ effort.project.name }}</td>
+                                                    <td class="py-2 px-3 text-end fw-medium">{{ effort.allocated_hours }} <span class="text-secondary small fw-normal">時間</span></td>
+                                                    <td class="py-2 px-3 text-end">
+                                                        <div class="d-flex justify-content-end gap-2">
+                                                            <a href="{% url 'admin_effort_edit' effort.pk %}" class="btn btn-sm btn-light border rounded-pill px-3 fw-semibold text-secondary">
+                                                                調整
+                                                            </a>
+                                                            <form action="{% url 'admin_effort_delete' effort.pk %}" method="post" class="d-inline" onsubmit="return confirm('本当にこの工数割り当てを削除しますか？');">
+                                                                {% csrf_token %}
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-semibold">
+                                                                    解除
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
-                                    {% else %}
-                                        <p class="text-muted mb-0 my-1" style="font-size:0.9rem;">この月に登録されているプロジェクト工数はありません。</p>
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                {% else %}
+                                    <div class="text-center py-4 text-muted small bg-white rounded-3 border border-light shadow-sm">
+                                        この月に登録されているプロジェクト工数はありません。
+                                    </div>
+                                {% endif %}
+                                
                             </div>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">社員データが存在しません。</td>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <div class="fs-4 mb-2">🔍</div>
+                            社員データが存在しません。
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-    
-    <div class="mt-4 text-start">
-        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary px-4">ダッシュボードに戻る</a>
+
+    <div class="d-flex">
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-light border rounded-pill px-4 fw-semibold text-secondary d-flex align-items-center">
+            <span class="me-1">←</span> ダッシュボードへ戻る
+        </a>
     </div>
 </div>
 {% endblock %}
